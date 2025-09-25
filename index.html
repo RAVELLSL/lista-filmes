@@ -22,19 +22,18 @@
             --cor-perigo: #e74c3c;
             --cor-perigo-fundo-hover: rgba(231, 76, 60, 0.1);
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(-20px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--cor-fundo);
@@ -57,10 +56,7 @@
             animation: fadeIn 0.5s ease-out;
             transition: max-width 0.4s ease;
         }
-        /* Aumenta a largura do container para 3 colunas */
-        .container.wide-container {
-            max-width: 1200px;
-        }
+        .container.wide-container { max-width: 1200px; }
 
         header h1 {
             text-align: center; font-weight: 700; font-size: 2em; margin-bottom: 30px;
@@ -91,9 +87,43 @@
         }
         #addMovieForm button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(109, 93, 252, 0.3); }
         #addMovieForm button:active { transform: translateY(0) scale(0.98); }
-        
+
+        #alphabetFilter {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cor-borda);
+        }
+        #alphabetFilter button {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.85em;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-suave);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            min-width: 38px; /* Garante que o # tenha um tamanho similar */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #alphabetFilter button:hover {
+            background-color: var(--cor-primaria);
+            color: white;
+        }
+        #alphabetFilter button.active-filter {
+            background: var(--cor-gradiente);
+            color: white;
+            box-shadow: 0 4px 10px rgba(109, 93, 252, 0.2);
+        }
+
+
         .list-header {
-            display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--cor-borda);
+            display: flex; align-items: center; gap: 10px;
             padding-bottom: 10px; margin-bottom: 20px;
         }
         .list-header h2 {
@@ -113,7 +143,7 @@
         }
         #movieList li:last-child { border-bottom: none; }
         #movieList li:hover { background-color: #f8f9fa; }
-        
+
         #movieList.two-columns, #movieList.three-columns {
             display: grid; gap: 15px;
         }
@@ -165,10 +195,7 @@
         .io-section button { font-family: 'Poppins', sans-serif; font-weight: 500; padding: 10px 20px; border-radius: 10px; border: 1px solid var(--cor-borda); background-color: var(--cor-container); color: var(--cor-texto); cursor: pointer; transition: all 0.2s ease; }
         .io-section button:hover { background-color: var(--cor-fundo); border-color: var(--cor-texto-suave); }
 
-        /* Media queries para responsividade */
-        @media (max-width: 1024px) {
-            #movieList.three-columns { grid-template-columns: 1fr 1fr; }
-        }
+        @media (max-width: 1024px) { #movieList.three-columns { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 768px) {
             .container { max-width: 100%; padding: 20px; }
             #movieList.two-columns, #movieList.three-columns { grid-template-columns: 1fr; }
@@ -187,6 +214,7 @@
                 </button>
             </form>
             <div class="movie-list-container">
+                <div id="alphabetFilter"></div>
                 <div class="list-header">
                     <h2>Sua Lista</h2><span id="movieCount"></span>
                 </div>
@@ -217,7 +245,8 @@
             const exportBtn = document.getElementById('exportBtn');
             const importBtn = document.getElementById('importBtn');
             const importFile = document.getElementById('importFile');
-            
+            const alphabetFilter = document.getElementById('alphabetFilter');
+
             const notesIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
             const editIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
             const saveIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>`;
@@ -225,6 +254,7 @@
 
             let movies = [];
             let noteSaveTimer;
+            let currentFilterLetter = 'all';
 
             const loadAndMigrateData = () => {
                 const loadedMovies = JSON.parse(localStorage.getItem('movieListApp')) || [];
@@ -234,6 +264,7 @@
 
             const saveMovies = () => localStorage.setItem('movieListApp', JSON.stringify(movies));
             const sortMovies = () => movies.sort((a, b) => a.title.localeCompare(b.title, 'pt-BR', { sensitivity: 'base' }));
+
             const extractTitleFromUrl = (url) => {
                 try {
                     const decodedUrl = decodeURIComponent(url);
@@ -244,24 +275,46 @@
                 } catch { return url; }
             };
 
+            const updateActiveFilterButton = () => {
+                const buttons = alphabetFilter.querySelectorAll('button');
+                buttons.forEach(button => {
+                    button.classList.remove('active-filter');
+                    if (button.dataset.letter.toLowerCase() === currentFilterLetter.toLowerCase()) {
+                        button.classList.add('active-filter');
+                    }
+                });
+            };
+
             const renderMovies = () => {
-                movieCountSpan.textContent = movies.length;
-                
+                let filteredMovies;
+
+                if (currentFilterLetter === 'all') {
+                    filteredMovies = movies;
+                } else if (currentFilterLetter === '#') {
+                    // Filtra por filmes que começam com um número (dígito)
+                    filteredMovies = movies.filter(movie => /^\d/.test(movie.title));
+                } else {
+                    // Filtra por filmes que começam com a letra selecionada
+                    filteredMovies = movies.filter(movie => movie.title.toUpperCase().startsWith(currentFilterLetter));
+                }
+
+                movieCountSpan.textContent = filteredMovies.length;
                 movieList.classList.remove('two-columns', 'three-columns');
                 mainContainer.classList.remove('wide-container');
-                if (movies.length >= 20) {
+
+                if (filteredMovies.length >= 20) {
                     movieList.classList.add('three-columns');
                     mainContainer.classList.add('wide-container');
-                } else if (movies.length >= 10) {
+                } else if (filteredMovies.length >= 10) {
                     movieList.classList.add('two-columns');
                 }
 
                 movieList.innerHTML = '';
-                if (movies.length === 0) {
+                if (filteredMovies.length === 0) {
                     emptyMessage.style.display = 'flex';
                 } else {
                     emptyMessage.style.display = 'none';
-                    movies.forEach(movie => {
+                    filteredMovies.forEach(movie => {
                         const li = document.createElement('li');
                         const hasNotes = movie.notes && movie.notes.trim() !== '';
                         li.className = `movie-item ${hasNotes ? 'notes-visible' : ''}`;
@@ -284,8 +337,9 @@
                     });
                     attachEventListeners();
                 }
+                updateActiveFilterButton();
             };
-            
+
             const attachEventListeners = () => {
                 document.querySelectorAll('.movie-item').forEach(li => {
                     const movieId = li.dataset.id;
@@ -315,7 +369,24 @@
 
             const addMovie = (title, link) => { movies.push({ id: Date.now(), title, link, notes: '' }); sortMovies(); saveMovies(); renderMovies(); };
             const deleteMovie = (idToDelete) => { movies = movies.filter(movie => movie.id.toString() !== idToDelete); saveMovies(); renderMovies(); };
-            
+
+            const createAlphabetFilter = () => {
+                const alphabet = ['Todos', '#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+                alphabet.forEach(letter => {
+                    const button = document.createElement('button');
+                    button.textContent = letter;
+                    button.dataset.letter = letter === 'Todos' ? 'all' : letter;
+                    alphabetFilter.appendChild(button);
+                });
+
+                alphabetFilter.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        currentFilterLetter = e.target.dataset.letter;
+                        renderMovies();
+                    }
+                });
+            };
+
             addMovieForm.addEventListener('submit', (event) => {
                 event.preventDefault(); const link = movieLinkInput.value.trim();
                 if (link) { addMovie(extractTitleFromUrl(link), link); addMovieForm.reset(); }
@@ -342,7 +413,6 @@
                     try {
                         const importedMovies = JSON.parse(e.target.result);
                         if (!Array.isArray(importedMovies)) throw new Error("O arquivo JSON não contém uma lista (array).");
-                        
                         if (confirm("Isso irá substituir sua lista atual. Deseja continuar?")) {
                             movies = importedMovies.map(m => ({ id: m.id || Date.now() + Math.random(), title: m.title || "Título Inválido", link: m.link || "#", notes: m.notes || "" }));
                             sortMovies(); saveMovies(); renderMovies();
@@ -351,13 +421,17 @@
                     } catch (error) {
                         alert("Erro ao importar o arquivo. Verifique se o arquivo JSON é válido.\nDetalhes: " + error.message);
                     } finally {
-                        event.target.value = null; // Limpa o input para permitir importar o mesmo arquivo novamente
+                        event.target.value = null;
                     }
                 };
                 reader.readAsText(file);
             });
 
-            loadAndMigrateData(); sortMovies(); renderMovies();
+            // --- Inicialização ---
+            createAlphabetFilter();
+            loadAndMigrateData();
+            sortMovies();
+            renderMovies();
         });
     </script>
 </body>
