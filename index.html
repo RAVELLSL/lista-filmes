@@ -48,134 +48,92 @@
 
         .container {
             width: 100%;
-            max-width: 800px; /* Aumentei a largura para acomodar melhor as colunas */
+            max-width: 800px;
             background-color: var(--cor-container);
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 40px var(--cor-sombra);
             border: 1px solid var(--cor-borda);
             animation: fadeIn 0.5s ease-out;
+            transition: max-width 0.4s ease;
+        }
+        /* Aumenta a largura do container para 3 colunas */
+        .container.wide-container {
+            max-width: 1200px;
         }
 
         header h1 {
-            text-align: center;
-            font-weight: 700;
-            font-size: 2em;
-            margin-bottom: 30px;
+            text-align: center; font-weight: 700; font-size: 2em; margin-bottom: 30px;
             background: var(--cor-gradiente);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text; color: transparent;
         }
 
-        #addMovieForm {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            align-items: center;
-        }
-
+        #addMovieForm { display: flex; gap: 10px; margin-bottom: 30px; align-items: center; }
         .input-group { flex-grow: 1; }
         .input-group input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid var(--cor-borda);
-            border-radius: 12px;
-            font-size: 1em;
-            font-family: 'Poppins', sans-serif;
+            width: 100%; padding: 14px 18px; border: 1px solid var(--cor-borda);
+            border-radius: 12px; font-size: 1em; font-family: 'Poppins', sans-serif;
             transition: all 0.2s ease;
         }
         .input-group input:focus {
-            outline: none;
-            border-color: var(--cor-primaria);
+            outline: none; border-color: var(--cor-primaria);
             box-shadow: 0 0 0 4px rgba(109, 93, 252, 0.15);
         }
 
         #addMovieForm button {
             display: flex; align-items: center; justify-content: center;
-            gap: 8px; padding: 14px 20px;
-            font-size: 1em; font-weight: 500;
+            gap: 8px; padding: 14px 20px; font-size: 1em; font-weight: 500;
             color: #fff; background: var(--cor-gradiente);
             border: none; border-radius: 12px; cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 4px 15px rgba(109, 93, 252, 0.2);
         }
-        #addMovieForm button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(109, 93, 252, 0.3);
-        }
+        #addMovieForm button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(109, 93, 252, 0.3); }
         #addMovieForm button:active { transform: translateY(0) scale(0.98); }
         
         .list-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--cor-borda);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--cor-borda);
+            padding-bottom: 10px; margin-bottom: 20px;
         }
         .list-header h2 {
             font-weight: 500; color: var(--cor-texto-suave);
-            font-size: 1em; text-transform: uppercase;
-            letter-spacing: 1px; margin: 0;
+            font-size: 1em; text-transform: uppercase; letter-spacing: 1px; margin: 0;
         }
         #movieCount {
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto-suave);
-            font-size: 0.8em;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 8px;
+            background-color: var(--cor-fundo); color: var(--cor-texto-suave);
+            font-size: 0.8em; font-weight: 700; padding: 4px 10px; border-radius: 8px;
         }
 
         #movieList { list-style: none; }
         #movieList li {
-            display: flex; flex-direction: column;
-            padding: 16px;
+            display: flex; flex-direction: column; padding: 16px;
             transition: background-color 0.2s ease, box-shadow 0.2s ease;
-            animation: slideIn 0.4s ease-out;
-            border-bottom: 1px solid var(--cor-borda);
+            animation: slideIn 0.4s ease-out; border-bottom: 1px solid var(--cor-borda);
         }
         #movieList li:last-child { border-bottom: none; }
         #movieList li:hover { background-color: #f8f9fa; }
         
-        /* Estilo de duas colunas */
-        #movieList.two-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        #movieList.two-columns, #movieList.three-columns {
+            display: grid; gap: 15px;
         }
-        #movieList.two-columns li {
-            border: 1px solid var(--cor-borda);
-            border-radius: 12px;
+        #movieList.two-columns { grid-template-columns: 1fr 1fr; }
+        #movieList.three-columns { grid-template-columns: 1fr 1fr 1fr; }
+
+        #movieList.two-columns li, #movieList.three-columns li {
+            border: 1px solid var(--cor-borda); border-radius: 12px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        #movieList.two-columns li:hover {
+        #movieList.two-columns li:hover, #movieList.three-columns li:hover {
              box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        /* Media query para responsividade */
-        @media (max-width: 768px) {
-            .container { max-width: 100%; padding: 20px; }
-            #movieList.two-columns {
-                grid-template-columns: 1fr; /* Volta para 1 coluna em telas menores */
-            }
-        }
-
 
         .movie-main-info { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; }
         .movie-title-section { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; min-width: 0;}
-        .movie-title-link {
-            text-decoration: none; color: var(--cor-texto);
-            font-weight: 500; word-break: break-word; font-size: 1.1em;
-        }
+        .movie-title-link { text-decoration: none; color: var(--cor-texto); font-weight: 500; word-break: break-word; font-size: 1.1em; }
         .movie-title-link:hover { color: var(--cor-primaria); }
 
-        .edit-title-input {
-            display: none; width: 100%; padding: 8px; font-size: 1.1em;
-            border-radius: 8px; border: 1px solid var(--cor-primaria);
-            font-family: 'Poppins', sans-serif;
-        }
-        
+        .edit-title-input { display: none; width: 100%; padding: 8px; font-size: 1.1em; border-radius: 8px; border: 1px solid var(--cor-primaria); font-family: 'Poppins', sans-serif; }
         .action-buttons { display: flex; gap: 5px; margin-left: 15px; }
         .action-buttons button {
             display: flex; align-items: center; justify-content: center;
@@ -196,34 +154,33 @@
         .is-editing .edit-title-input, .is-editing .save-btn { display: block; }
         .notes-visible .notes-btn svg { stroke: var(--cor-primaria); }
 
-        .notes-section {
-            overflow: hidden; max-height: 0; opacity: 0; margin-top: 0;
-            transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
-        }
+        .notes-section { overflow: hidden; max-height: 0; opacity: 0; margin-top: 0; transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease; }
         .notes-visible .notes-section { max-height: 200px; opacity: 1; margin-top: 12px; }
-        .notes-textarea {
-            width: 100%; padding: 10px; border: 1px solid #f0f0f0; border-radius: 8px;
-            font-family: 'Poppins', sans-serif; font-size: 0.9em;
-            color: var(--cor-texto-suave); resize: vertical; min-height: 40px; transition: all 0.2s ease;
-        }
+        .notes-textarea { width: 100%; padding: 10px; border: 1px solid #f0f0f0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.9em; color: var(--cor-texto-suave); resize: vertical; min-height: 40px; transition: all 0.2s ease; }
         .notes-textarea:focus { outline: none; border-color: var(--cor-borda); color: var(--cor-texto); }
-        #emptyMessage {
-            display: none; flex-direction: column; align-items: center; gap: 15px;
-            text-align: center; color: var(--cor-texto-suave); padding: 40px 20px; 
-        }
+        #emptyMessage { display: none; flex-direction: column; align-items: center; gap: 15px; text-align: center; color: var(--cor-texto-suave); padding: 40px 20px; }
         #emptyMessage svg { stroke: #ccc; }
+
+        .io-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--cor-borda); display: flex; justify-content: center; gap: 15px; }
+        .io-section button { font-family: 'Poppins', sans-serif; font-weight: 500; padding: 10px 20px; border-radius: 10px; border: 1px solid var(--cor-borda); background-color: var(--cor-container); color: var(--cor-texto); cursor: pointer; transition: all 0.2s ease; }
+        .io-section button:hover { background-color: var(--cor-fundo); border-color: var(--cor-texto-suave); }
+
+        /* Media queries para responsividade */
+        @media (max-width: 1024px) {
+            #movieList.three-columns { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .container { max-width: 100%; padding: 20px; }
+            #movieList.two-columns, #movieList.three-columns { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Minha Lista de Filmes</h1>
-        </header>
+    <div class="container" id="mainContainer">
+        <header><h1>Minha Lista de Filmes</h1></header>
         <main>
             <form id="addMovieForm">
-                <div class="input-group">
-                    <input type="url" id="movieLink" placeholder="Cole o link do filme aqui..." required>
-                </div>
+                <div class="input-group"><input type="url" id="movieLink" placeholder="Cole o link do filme aqui..." required></div>
                 <button type="submit" title="Adicionar Filme">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     <span>Adicionar</span>
@@ -231,8 +188,7 @@
             </form>
             <div class="movie-list-container">
                 <div class="list-header">
-                    <h2>Sua Lista</h2>
-                    <span id="movieCount"></span>
+                    <h2>Sua Lista</h2><span id="movieCount"></span>
                 </div>
                 <ul id="movieList"></ul>
                 <div id="emptyMessage">
@@ -241,15 +197,26 @@
                 </div>
             </div>
         </main>
+        <footer>
+            <div class="io-section">
+                <button id="exportBtn">Exportar para JSON</button>
+                <button id="importBtn">Importar de JSON</button>
+                <input type="file" id="importFile" accept=".json" style="display:none;">
+            </div>
+        </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const mainContainer = document.getElementById('mainContainer');
             const addMovieForm = document.getElementById('addMovieForm');
             const movieLinkInput = document.getElementById('movieLink');
             const movieList = document.getElementById('movieList');
             const movieCountSpan = document.getElementById('movieCount');
             const emptyMessage = document.getElementById('emptyMessage');
+            const exportBtn = document.getElementById('exportBtn');
+            const importBtn = document.getElementById('importBtn');
+            const importFile = document.getElementById('importFile');
             
             const notesIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
             const editIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
@@ -261,18 +228,12 @@
 
             const loadAndMigrateData = () => {
                 const loadedMovies = JSON.parse(localStorage.getItem('movieListApp')) || [];
-                movies = loadedMovies.map(movie => ({
-                    id: movie.id || Date.now() + Math.random(),
-                    title: movie.title,
-                    link: movie.link,
-                    notes: movie.notes || ''
-                }));
+                movies = loadedMovies.map(movie => ({ id: movie.id || Date.now() + Math.random(), title: movie.title, link: movie.link, notes: movie.notes || '' }));
                 saveMovies();
             };
 
             const saveMovies = () => localStorage.setItem('movieListApp', JSON.stringify(movies));
             const sortMovies = () => movies.sort((a, b) => a.title.localeCompare(b.title, 'pt-BR', { sensitivity: 'base' }));
-            
             const extractTitleFromUrl = (url) => {
                 try {
                     const decodedUrl = decodeURIComponent(url);
@@ -284,14 +245,15 @@
             };
 
             const renderMovies = () => {
-                // Atualiza o contador de filmes
                 movieCountSpan.textContent = movies.length;
                 
-                // Adiciona ou remove a classe para o layout de duas colunas
-                if (movies.length >= 10) {
+                movieList.classList.remove('two-columns', 'three-columns');
+                mainContainer.classList.remove('wide-container');
+                if (movies.length >= 20) {
+                    movieList.classList.add('three-columns');
+                    mainContainer.classList.add('wide-container');
+                } else if (movies.length >= 10) {
                     movieList.classList.add('two-columns');
-                } else {
-                    movieList.classList.remove('two-columns');
                 }
 
                 movieList.innerHTML = '';
@@ -317,10 +279,7 @@
                                     <button class="delete-btn" title="Excluir Filme">${trashIconSVG}</button>
                                 </div>
                             </div>
-                            <div class="notes-section">
-                                <textarea class="notes-textarea" placeholder="Anotações... (salva automaticamente)">${movie.notes}</textarea>
-                            </div>
-                        `;
+                            <div class="notes-section"><textarea class="notes-textarea" placeholder="Anotações... (salva automaticamente)">${movie.notes}</textarea></div>`;
                         movieList.appendChild(li);
                     });
                     attachEventListeners();
@@ -330,30 +289,19 @@
             const attachEventListeners = () => {
                 document.querySelectorAll('.movie-item').forEach(li => {
                     const movieId = li.dataset.id;
-                    const notesBtn = li.querySelector('.notes-btn');
-                    const editBtn = li.querySelector('.edit-btn');
-                    const saveBtn = li.querySelector('.save-btn');
-                    const deleteBtn = li.querySelector('.delete-btn');
+                    const [notesBtn, editBtn, saveBtn, deleteBtn] = [li.querySelector('.notes-btn'), li.querySelector('.edit-btn'), li.querySelector('.save-btn'), li.querySelector('.delete-btn')];
                     const titleInput = li.querySelector('.edit-title-input');
                     const notesTextarea = li.querySelector('.notes-textarea');
 
-                    notesBtn.addEventListener('click', () => {
-                        li.classList.toggle('notes-visible');
-                        if (li.classList.contains('notes-visible')) notesTextarea.focus();
-                    });
-                    editBtn.addEventListener('click', () => {
-                        li.classList.add('is-editing');
-                        titleInput.focus();
-                    });
+                    notesBtn.addEventListener('click', () => { li.classList.toggle('notes-visible'); if (li.classList.contains('notes-visible')) notesTextarea.focus(); });
+                    editBtn.addEventListener('click', () => { li.classList.add('is-editing'); titleInput.focus(); });
+                    deleteBtn.addEventListener('click', () => deleteMovie(movieId));
                     saveBtn.addEventListener('click', () => {
                         const movie = movies.find(m => m.id.toString() === movieId);
                         movie.title = titleInput.value;
                         li.classList.remove('is-editing');
-                        sortMovies();
-                        saveMovies();
-                        renderMovies();
+                        sortMovies(); saveMovies(); renderMovies();
                     });
-                    deleteBtn.addEventListener('click', () => deleteMovie(movieId));
                     notesTextarea.addEventListener('input', () => {
                         clearTimeout(noteSaveTimer);
                         noteSaveTimer = setTimeout(() => {
@@ -365,31 +313,51 @@
                 });
             };
 
-            const addMovie = (title, link) => {
-                movies.push({ id: Date.now(), title, link, notes: '' });
-                sortMovies();
-                saveMovies();
-                renderMovies();
-            };
-            const deleteMovie = (idToDelete) => {
-                movies = movies.filter(movie => movie.id.toString() !== idToDelete);
-                saveMovies();
-                renderMovies();
-            };
-
+            const addMovie = (title, link) => { movies.push({ id: Date.now(), title, link, notes: '' }); sortMovies(); saveMovies(); renderMovies(); };
+            const deleteMovie = (idToDelete) => { movies = movies.filter(movie => movie.id.toString() !== idToDelete); saveMovies(); renderMovies(); };
+            
             addMovieForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const link = movieLinkInput.value.trim();
-                if (link) {
-                    const title = extractTitleFromUrl(link);
-                    addMovie(title, link);
-                    addMovieForm.reset();
-                }
+                event.preventDefault(); const link = movieLinkInput.value.trim();
+                if (link) { addMovie(extractTitleFromUrl(link), link); addMovieForm.reset(); }
             });
 
-            loadAndMigrateData();
-            sortMovies();
-            renderMovies();
+            exportBtn.addEventListener('click', () => {
+                if (movies.length === 0) { alert("Sua lista está vazia. Não há nada para exportar."); return; }
+                const dataStr = JSON.stringify(movies, null, 2);
+                const dataBlob = new Blob([dataStr], {type: "application/json"});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'minha-lista-de-filmes.json';
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+
+            importBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedMovies = JSON.parse(e.target.result);
+                        if (!Array.isArray(importedMovies)) throw new Error("O arquivo JSON não contém uma lista (array).");
+                        
+                        if (confirm("Isso irá substituir sua lista atual. Deseja continuar?")) {
+                            movies = importedMovies.map(m => ({ id: m.id || Date.now() + Math.random(), title: m.title || "Título Inválido", link: m.link || "#", notes: m.notes || "" }));
+                            sortMovies(); saveMovies(); renderMovies();
+                            alert("Lista importada com sucesso!");
+                        }
+                    } catch (error) {
+                        alert("Erro ao importar o arquivo. Verifique se o arquivo JSON é válido.\nDetalhes: " + error.message);
+                    } finally {
+                        event.target.value = null; // Limpa o input para permitir importar o mesmo arquivo novamente
+                    }
+                };
+                reader.readAsText(file);
+            });
+
+            loadAndMigrateData(); sortMovies(); renderMovies();
         });
     </script>
 </body>
