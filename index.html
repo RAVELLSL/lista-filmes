@@ -48,7 +48,7 @@
 
         .container {
             width: 100%;
-            max-width: 700px;
+            max-width: 800px; /* Aumentei a largura para acomodar melhor as colunas */
             background-color: var(--cor-container);
             padding: 40px;
             border-radius: 20px;
@@ -106,27 +106,64 @@
         }
         #addMovieForm button:active { transform: translateY(0) scale(0.98); }
         
-        .movie-list-container h2 {
+        .list-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--cor-borda);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .list-header h2 {
             font-weight: 500; color: var(--cor-texto-suave);
             font-size: 1em; text-transform: uppercase;
-            letter-spacing: 1px; border-bottom: 1px solid var(--cor-borda);
-            padding-bottom: 10px; margin-bottom: 15px;
+            letter-spacing: 1px; margin: 0;
+        }
+        #movieCount {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-suave);
+            font-size: 0.8em;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 8px;
         }
 
         #movieList { list-style: none; }
         #movieList li {
             display: flex; flex-direction: column;
             padding: 16px;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
             animation: slideIn 0.4s ease-out;
             border-bottom: 1px solid var(--cor-borda);
         }
         #movieList li:last-child { border-bottom: none; }
         #movieList li:hover { background-color: #f8f9fa; }
+        
+        /* Estilo de duas colunas */
+        #movieList.two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        #movieList.two-columns li {
+            border: 1px solid var(--cor-borda);
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        #movieList.two-columns li:hover {
+             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        /* Media query para responsividade */
+        @media (max-width: 768px) {
+            .container { max-width: 100%; padding: 20px; }
+            #movieList.two-columns {
+                grid-template-columns: 1fr; /* Volta para 1 coluna em telas menores */
+            }
+        }
+
 
         .movie-main-info { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; }
-        .movie-title-section { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
-
+        .movie-title-section { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; min-width: 0;}
         .movie-title-link {
             text-decoration: none; color: var(--cor-texto);
             font-weight: 500; word-break: break-word; font-size: 1.1em;
@@ -147,51 +184,32 @@
             transition: all 0.2s ease;
         }
         .action-buttons button svg { stroke: var(--cor-texto-suave); transition: all 0.2s ease; }
-
         .notes-btn:hover, .edit-btn:hover { background-color: rgba(109, 93, 252, 0.1); }
         .notes-btn:hover svg, .edit-btn:hover svg { stroke: var(--cor-secundaria); }
-
         .save-btn { display: none; }
         .save-btn:hover { background-color: rgba(40, 167, 69, 0.1); }
         .save-btn:hover svg { stroke: var(--cor-sucesso); }
-
         .delete-btn:hover { background-color: var(--cor-perigo-fundo-hover); }
         .delete-btn:hover svg { stroke: var(--cor-perigo); }
 
         .is-editing .movie-title-link, .is-editing .edit-btn { display: none; }
         .is-editing .edit-title-input, .is-editing .save-btn { display: block; }
-
         .notes-visible .notes-btn svg { stroke: var(--cor-primaria); }
 
         .notes-section {
-            overflow: hidden;
-            max-height: 0;
-            opacity: 0;
-            margin-top: 0;
+            overflow: hidden; max-height: 0; opacity: 0; margin-top: 0;
             transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
         }
-        
-        .notes-visible .notes-section {
-            max-height: 200px;
-            opacity: 1;
-            margin-top: 12px;
-        }
-        
+        .notes-visible .notes-section { max-height: 200px; opacity: 1; margin-top: 12px; }
         .notes-textarea {
-            width: 100%; padding: 10px;
-            border: 1px solid #f0f0f0; border-radius: 8px;
+            width: 100%; padding: 10px; border: 1px solid #f0f0f0; border-radius: 8px;
             font-family: 'Poppins', sans-serif; font-size: 0.9em;
-            color: var(--cor-texto-suave); resize: vertical;
-            min-height: 40px; transition: all 0.2s ease;
+            color: var(--cor-texto-suave); resize: vertical; min-height: 40px; transition: all 0.2s ease;
         }
-        .notes-textarea:focus {
-            outline: none; border-color: var(--cor-borda); color: var(--cor-texto);
-        }
-
+        .notes-textarea:focus { outline: none; border-color: var(--cor-borda); color: var(--cor-texto); }
         #emptyMessage {
             display: none; flex-direction: column; align-items: center; gap: 15px;
-            text-align: center; color: var(--cor-texto-suave);
-            padding: 40px 20px; 
+            text-align: center; color: var(--cor-texto-suave); padding: 40px 20px; 
         }
         #emptyMessage svg { stroke: #ccc; }
     </style>
@@ -212,7 +230,10 @@
                 </button>
             </form>
             <div class="movie-list-container">
-                <h2>Sua Lista</h2>
+                <div class="list-header">
+                    <h2>Sua Lista</h2>
+                    <span id="movieCount"></span>
+                </div>
                 <ul id="movieList"></ul>
                 <div id="emptyMessage">
                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
@@ -227,6 +248,7 @@
             const addMovieForm = document.getElementById('addMovieForm');
             const movieLinkInput = document.getElementById('movieLink');
             const movieList = document.getElementById('movieList');
+            const movieCountSpan = document.getElementById('movieCount');
             const emptyMessage = document.getElementById('emptyMessage');
             
             const notesIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
@@ -249,13 +271,7 @@
             };
 
             const saveMovies = () => localStorage.setItem('movieListApp', JSON.stringify(movies));
-            
-            // NOVO: Função para organizar os filmes em ordem alfabética
-            const sortMovies = () => {
-                movies.sort((a, b) => {
-                    return a.title.localeCompare(b.title, 'pt-BR', { sensitivity: 'base' });
-                });
-            };
+            const sortMovies = () => movies.sort((a, b) => a.title.localeCompare(b.title, 'pt-BR', { sensitivity: 'base' }));
             
             const extractTitleFromUrl = (url) => {
                 try {
@@ -268,6 +284,16 @@
             };
 
             const renderMovies = () => {
+                // Atualiza o contador de filmes
+                movieCountSpan.textContent = movies.length;
+                
+                // Adiciona ou remove a classe para o layout de duas colunas
+                if (movies.length >= 10) {
+                    movieList.classList.add('two-columns');
+                } else {
+                    movieList.classList.remove('two-columns');
+                }
+
                 movieList.innerHTML = '';
                 if (movies.length === 0) {
                     emptyMessage.style.display = 'flex';
@@ -313,27 +339,21 @@
 
                     notesBtn.addEventListener('click', () => {
                         li.classList.toggle('notes-visible');
-                        if (li.classList.contains('notes-visible')) {
-                            notesTextarea.focus();
-                        }
+                        if (li.classList.contains('notes-visible')) notesTextarea.focus();
                     });
-
                     editBtn.addEventListener('click', () => {
                         li.classList.add('is-editing');
                         titleInput.focus();
                     });
-
                     saveBtn.addEventListener('click', () => {
                         const movie = movies.find(m => m.id.toString() === movieId);
                         movie.title = titleInput.value;
                         li.classList.remove('is-editing');
-                        sortMovies(); // Re-organiza após editar
+                        sortMovies();
                         saveMovies();
                         renderMovies();
                     });
-
                     deleteBtn.addEventListener('click', () => deleteMovie(movieId));
-
                     notesTextarea.addEventListener('input', () => {
                         clearTimeout(noteSaveTimer);
                         noteSaveTimer = setTimeout(() => {
@@ -346,16 +366,11 @@
             };
 
             const addMovie = (title, link) => {
-                movies.push({ // Usamos push, pois a ordem será definida pela função sortMovies
-                    id: Date.now(), title, link, notes: ''
-                });
-                sortMovies(); // Organiza após adicionar
+                movies.push({ id: Date.now(), title, link, notes: '' });
+                sortMovies();
                 saveMovies();
                 renderMovies();
             };
-
-
-
             const deleteMovie = (idToDelete) => {
                 movies = movies.filter(movie => movie.id.toString() !== idToDelete);
                 saveMovies();
@@ -372,9 +387,8 @@
                 }
             });
 
-            // Inicialização da aplicação
             loadAndMigrateData();
-            sortMovies(); // Organiza ao carregar a página
+            sortMovies();
             renderMovies();
         });
     </script>
